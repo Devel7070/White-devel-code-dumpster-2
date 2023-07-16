@@ -26,7 +26,7 @@ async def voice(ctx):
     ctx.voice_client.play(discord.FFmpegPCMAudio(
         "assets/babi.mp3"), after=None)
 
-
+#devel i have 30 more minutes to code!!!
 @bot.command()
 async def leave(ctx):
     channel = ctx.voice_client
