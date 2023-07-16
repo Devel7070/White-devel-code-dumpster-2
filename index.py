@@ -20,9 +20,19 @@ async def on_ready():
 
 
 @bot.command()
-async def ping(ctx):
-    while True:
-        await ctx.reply("I hate niggers(omar)!")
-        asyncio.sleep(10)
+async def voice(ctx):
+    await ctx.author.voice.channel.connect()
+    voice = ctx.voice_client
+    ctx.voice_client.play(discord.FFmpegPCMAudio(
+        "assets/babi.mp3"), after=None)
+
+
+@bot.command()
+async def leave(ctx):
+    channel = ctx.voice_client
+    if (not channel):
+        return await ctx.reply("I'll break ya fucking legs! You Fucking donut!")
+    else:
+        await channel.disconnect()
 
 bot.run(token=os.getenv("DISCORD_BOT_TOKEN"))
