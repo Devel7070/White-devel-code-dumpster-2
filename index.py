@@ -5,11 +5,7 @@ from dotenv import load_dotenv
 import asyncio
 
 load_dotenv()
-<<<<<<< HEAD
-#intents
-=======
 # intents
->>>>>>> e4f1a03469f71c0efc2ad401e7abea0e4f293fff
 intents = discord.Intents.default()
 intents.message_content = True
 
