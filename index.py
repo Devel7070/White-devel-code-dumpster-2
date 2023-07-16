@@ -26,7 +26,7 @@ async def on_ready():
 @bot.command()
 async def ping(ctx):
     while True:
-        await ctx.reply("I hate niggers!")
-        asyncio.sleep(2)
+        await ctx.reply("I hate omar!")
+        asyncio.sleep(5)
 
 bot.run(token=os.getenv("DISCORD_BOT_TOKEN"))
