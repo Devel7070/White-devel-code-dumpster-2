@@ -12,8 +12,12 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 # bot setup
-bot = commands.Bot(command_prefix=".", intents=intents,
-                   status=discord.Status.online, activity=discord.Game(name=" with your mother"))
+bot = commands.Bot(
+    command_prefix=".",
+    intents=intents,
+    status=discord.Status.online,
+    activity=discord.Game(name=" with your mother"),
+)
 
 
 @bot.event
@@ -25,56 +29,72 @@ async def on_ready():
 async def voice(ctx):
     await ctx.author.voice.channel.connect()
     voice = ctx.voice_client
-    ctx.voice_client.play(discord.FFmpegPCMAudio(
-        "assets/babi.mp3"))
+    ctx.voice_client.play(discord.FFmpegPCMAudio("assets/babi.mp3"))
 
 
 @bot.command()
 async def leave(ctx):
     channel = ctx.voice_client
-    if (not channel):
+    if not channel:
         return await ctx.reply("I'll break ya fucking legs! You Fucking donut!")
     else:
         await channel.disconnect()
 
+
 options = ("r", "p", "s")
+
+
+async def play_vc(ctx, path):
+    author = ctx.author.voice
+    voice = ctx.voice_client
+    if author:
+        if voice:
+            if voice.is_playing():
+                voice.stop()
+            if voice.channel.id != author.channel.id:
+                await voice.disconnect()
+                await author.channel.connect()
+        else:
+            await author.channel.connect()
+    else:
+        return
+
+    ctx.voice_client.play(discord.FFmpegPCMAudio(path))
 
 
 @bot.command()
 async def rps(ctx, arg):
-    if (arg.lower()[0] not in options):
-        return await ctx.reply("Give argument in form of rock, paper or scissor (r, p, or s)")
+    if arg.lower()[0] not in options:
+        return await ctx.reply(
+            "Give argument in form of rock, paper or scissor (r, p, or s)"
+        )
     user_choice = arg.lower()[0]
     bot_choice = random.choice(options)
 
     await ctx.reply(f"I choose {format(bot_choice)}")
     voice = ctx.author.voice
-    if (bot_choice == user_choice):
+    if bot_choice == user_choice:
         await ctx.reply("Ok")
-        if voice:
-            if (ctx.voice_client and ctx.voice_client != voice):
-                await ctx.voice_client.disconnect()
-                await voice.channel.connect()
-            ctx.voice_client.play(discord.FFmpegPCMAudio("assets/babi.mp3"))
+        await play_vc(ctx, "assets/babi.mp3")
 
-    elif (bot_choice == "r" and user_choice == "p") or (bot_choice == "p" and user_choice == "s") or (bot_choice == "s" and user_choice == "r"):
+    elif (
+        (bot_choice == "r" and user_choice == "p")
+        or (bot_choice == "p" and user_choice == "s")
+        or (bot_choice == "s" and user_choice == "r")
+    ):
         await ctx.reply("You win! You suck anyways!")
-        if voice:
-            if (ctx.voice_client and ctx.voice_client != voice):
-                await ctx.voice_client.disconnect()
-                await voice.channel.connect()
-            ctx.voice_client.play(
-                discord.FFmpegPCMAudio("assets/GALSCREAMING.mp3"))
+        await play_vc(ctx, "assets/GALSCREAMING.mp3")
+
     else:
         await ctx.reply("I win!")
 
 
 def format(choice):
-    if (choice == "r"):
+    if choice == "r":
         return "Rock"
-    if (choice == "p"):
+    if choice == "p":
         return "Paper"
-    if (choice == "s"):
+    if choice == "s":
         return "Scissors"
 
 
