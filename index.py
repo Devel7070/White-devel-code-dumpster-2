@@ -25,6 +25,14 @@ async def on_ready():
     print("Successfully logged in!")
 
 
+@bot.event
+async def on_message(msg):
+    if ("nigga" in msg.content.lower()) or ("nigger" in msg.content.lower()):
+        await msg.reply(
+            "NUH UH! You are not black you can't say that. I am and I will say it. NI-")
+    await bot.process_commands(msg)
+
+
 @bot.command()
 async def voice(ctx):
     await ctx.author.voice.channel.connect()
