@@ -97,6 +97,14 @@ async def rps(ctx, arg):
         await ctx.reply("I win!")
 
 
+coinflip_options = ("heads", "tails")
+
+
+@bot.command()
+async def coinflip(ctx):
+    await ctx.reply(f"I choose {random.choice(coinflip_options)}")
+
+
 def format(choice):
     if choice == "r":
         return "Rock"
